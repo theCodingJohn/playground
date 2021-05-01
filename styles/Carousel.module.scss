@@ -1,0 +1,39 @@
+.carousel {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.prev,
+.next {
+  position: absolute;
+  height: 30px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 1;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.carousel_inner {
+  display: flex;
+  height: 100%;
+  width: 125vw;
+  transform: translateX(-75vw);
+}
+
+.item {
+  height: 100%;
+  width: 25vw;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
