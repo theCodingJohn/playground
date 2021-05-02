@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Head from "next/head";
 import projects from "../utils/carouselData";
 import { RightArrow, LeftArrow } from "../utils/icons";
 import Slider from "react-slick";
@@ -41,6 +42,9 @@ const carousel = () => {
 
   return (
     <section className={style.carousel}>
+      <Head>
+        <title>Carousel</title>
+      </Head>
       <span onClick={prev} className={`${style.arrow_button} ${style.prev}`}>
         <LeftArrow />
       </span>
