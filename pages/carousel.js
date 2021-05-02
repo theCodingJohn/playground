@@ -1,95 +1,79 @@
-import { useState, useEffect } from "react";
+import { useRef } from "react";
 import projects from "../utils/carouselData";
+import { RightArrow, LeftArrow } from "../utils/icons";
+import Slider from "react-slick";
 import style from "../styles/Carousel.module.scss";
-import gsap from "gsap";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-function carousel() {
-  const [translate, setTranslate] = useState(-75);
-  const width = (projects.length + 6) * 25;
+const carousel = () => {
+  const sliderRef = useRef(null);
 
-  useEffect(() => {
-    if (translate === 0) {
-      setTranslate(projects.length * -25);
-    }
-
-    if (translate === (projects.length - 1) * -25 + -75) {
-      gsap.set(".carousel_inner", { x: `${translate - -125}vw`, duration: 0 });
-      console.log("gsap", translate - -125);
-      setTranslate(-50);
-    }
-    console.log(translate);
-  }, [translate]);
-
-  const prev = () => {
-    gsap.to(".carousel_inner", { x: `${translate + 25}vw` });
-    setTranslate(translate + 25);
+  const settings = {
+    infinite: true,
+    speed: 300,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    swipeToSlide: true,
+    responsive: [
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   const next = () => {
-    gsap.to(".carousel_inner", { x: `${translate + -25}vw` });
-    setTranslate(translate + -25);
+    sliderRef.current.slickNext();
+  };
+
+  const prev = () => {
+    sliderRef.current.slickPrev();
   };
 
   return (
     <section className={style.carousel}>
-      <button onClick={prev} className={style.prev}>
-        prev
-      </button>
-      <button onClick={next} className={style.next}>
-        next
-      </button>
-      <div
-        className={`${style.carousel_inner} carousel_inner`}
-        style={{
-          width: `${width}vw`,
-        }}
-      >
-        <div
-          style={{
-            backgroundImage: `url(${projects[projects.length - 3].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-        <div
-          style={{
-            backgroundImage: `url(${projects[projects.length - 2].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-        <div
-          style={{
-            backgroundImage: `url(${projects[projects.length - 1].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-        {projects.map((project, i) => (
-          <div
-            style={{ backgroundImage: `url(${project.image})` }}
-            key={project.id}
-            className={`${style.item}`}
-          ></div>
+      <span onClick={prev} className={`${style.arrow_button} ${style.prev}`}>
+        <LeftArrow />
+      </span>
+      <span onClick={next} className={`${style.arrow_button} ${style.next}`}>
+        <RightArrow />
+      </span>
+
+      <Slider ref={sliderRef} {...settings}>
+        {projects.map((project) => (
+          <div key={project.id}>
+            <div className={style.cover}></div>
+            <a
+              style={{
+                backgroundImage: `url(${project.image})`,
+              }}
+              className={style.slide}
+            >
+              <div className={style.cover}>
+                <div className={style.text}>
+                  <h2 className={style.h2}>{project.name}</h2>
+                  <div className={style.red_line}></div>
+                  <p>
+                    Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
+                    odit aut fugit, sed quia consequuntur.
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
         ))}
-        <div
-          style={{
-            backgroundImage: `url(${projects[0].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-        <div
-          style={{
-            backgroundImage: `url(${projects[1].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-        <div
-          style={{
-            backgroundImage: `url(${projects[2].image})`,
-          }}
-          className={`${style.item}`}
-        ></div>
-      </div>
+      </Slider>
     </section>
   );
-}
+};
 
 export default carousel;
